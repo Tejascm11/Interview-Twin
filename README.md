@@ -1,47 +1,34 @@
 # Interview Twin
 
-Interview Twin is a web-based mock interview platform that helps candidates practice interviews, analyze resumes, answer interview questions, receive interview guidance, and track their preparation progress.
+Interview Twin is a web-based mock interview platform for interview practice, resume analysis, interview guidance, and progress tracking.
 
 ## Setup
 
-1. Download or clone this repository.
+1. Clone or download the repository.
+2. Open the project in **VS Code**.
+3. Install **Live Server**.
+4. Right-click `index.html` → **Open with Live Server**.
+5. Open the website at `http://127.0.0.1:5500/`.
 
-2. Open the project folder in **VS Code**.
-
-3. Install the **Live Server** extension.
-
-4. Right-click `index.html` and select **Open with Live Server**.
-
-5. The website should open at a URL similar to:
-
-```text
-http://127.0.0.1:5500/
 ## Firebase Setup
-```
-### 1. Create Firebase Project
-Go to https://console.firebase.google.com/ → **Create a project** → Enter `Interview Twin` → Create.
 
-### 2. Add Web App
-Firebase Project → **Add app** → **Web** → Enter `Interview Twin Web` → **Register app** → Copy the Firebase configuration.
+1. **Create Project**  
+   Firebase Console → Create Project → `Interview Twin`.
 
-### 3. Add Configuration
-Open `firebase-init.js` and replace the `PASTE_...` values with your Firebase configuration.
+2. **Add Web App**  
+   Project → Add App → Web → `Interview Twin Web` → Register → Copy config.
 
-### 4. Enable Authentication
-Firebase → **Authentication** → **Sign-in method** → Enable **Email/Password** → Save.
+3. **Add Config**  
+   Open `firebase-init.js` → replace `PASTE_...` values with your Firebase config.
 
-### 5. Create Firestore
-Firebase → **Build** → **Firestore Database** → **Create database**.
+4. **Enable Login**  
+   Authentication → Sign-in method → Enable **Email/Password**.
 
-### 6. Add Firestore Rules
-Open `firestore.rules` → Copy the rules → Firebase → **Firestore Database → Rules** → Paste → **Publish**.
+5. **Create Database**  
+   Build → Firestore Database → **Create Database**.
 
-### 7. Run
-Open `index.html` using **Live Server**. Do not open it directly with `file://`.
+6. **Add Rules**  
+   Copy `firestore.rules` → Firestore → Rules → Paste → **Publish**.
 
-### 8. GitHub Pages
-GitHub → **Repository → Settings → Pages** → Select `main` branch and `/ (root)` → Save.
-
-Then add your GitHub Pages domain under:
-
-**Firebase → Authentication → Settings → Authorized domains**
+7. **Run**  
+   Use **Live Server**. Do not open with `file://`.
