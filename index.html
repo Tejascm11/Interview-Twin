@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interview Twin</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    if (window.pdfjsLib) {
+      pdfjsLib.GlobalWorkerOptions.workerSrc =
+        "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+    }
+  </script>
+</head>
+
+<body>
+
+  <div id="authScreen" class="auth-screen">
+    <div class="auth-card">
+      <div class="auth-logo">🎯</div>
+      <p class="eyebrow">INTERVIEW TWIN</p>
+      <h1 id="authTitle">Create your account</h1>
+      <p id="authSubtitle" class="muted">Save your interviews, resume analysis and progress securely.</p>
+      <div id="authError" class="auth-error hidden"></div>
+      <label>Email</label>
+      <input id="authEmail" class="auth-input" type="email" placeholder="you@example.com" autocomplete="email">
+      <label>Password</label>
+      <input id="authPassword" class="auth-input" type="password" placeholder="At least 6 characters"
+        autocomplete="current-password">
+      <label id="authNameLabel">Name</label>
+      <input id="authName" class="auth-input" type="text" placeholder="Your name" autocomplete="name">
+      <button id="authSubmit" class="primary wide">Create Account</button>
+      <button id="authToggle" class="auth-toggle">Already have an account? Log in</button>
+      <p class="auth-note">Your account data is stored in Firebase Firestore.</p>
+    </div>
+  </div>
+
+  <div class="app" id="appShell" style="display:none">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">IT</div>
+        <div><b>Interview Twin</b><span>Interview intelligence</span></div>
+      </div>
+      <nav>
+        <button class="nav-item active" data-page="dashboard">⌂ <span>Dashboard</span></button>
+        <button class="nav-item" data-page="setup">＋ <span>New Interview</span></button>
+        <button class="nav-item" data-page="topicQuestions">? <span>Topic Questions</span></button>
+        <button class="nav-item" data-page="resume">▣ <span>Resume & ATS</span></button>
+        <button class="nav-item" data-page="history">◷ <span>History</span></button>
+        <button class="nav-item" data-page="progress">↗ <span>Progress</span></button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="account-box">
+          <div class="status-dot"></div>
+          <div><b id="accountName">Account</b><small id="accountEmail">—</small></div>
+        </div>
+        <button id="logoutBtn" class="logout-btn">↪ Log out</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <section id="dashboard" class="page active">
+        <div class="topbar">
+          <div>
+            <p class="eyebrow">INTERVIEW PREPARATION</p>
+            <h1>Build confidence by practicing.</h1>
+            <p class="muted">Take your time. There is no interview timer.</p>
+          </div><button class="primary" onclick="showPage('setup')">Start Interview</button>
+        </div>
+        <div class="stats">
+          <div class="stat"><span>Interviews completed</span><strong id="statInterviews">0</strong></div>
+          <div class="stat"><span>Questions answered</span><strong id="statQuestions">0</strong></div>
+          <div class="stat"><span>Average score</span><strong id="statAverage">—</strong></div>
+          <div class="stat"><span>Best score</span><strong id="statBest">—</strong></div>
+        </div>
+        <div class="section-title">
+          <h2>Quick practice</h2><span>Choose a mode</span>
+        </div>
+        <div class="quick-grid">
+          <button onclick="quickStart('Technical')"><b>Technical</b><span>Programming, CS and technical
+              concepts</span></button>
+          <button onclick="quickStart('Behavioral')"><b>Behavioral</b><span>Communication and workplace
+              situations</span></button>
+          <button onclick="quickStart('HR')"><b>HR</b><span>Common fresher interview questions</span></button>
+          <button onclick="quickStart('Projects')"><b>Projects</b><span>Explain and defend your projects</span></button>
+        </div>
+        <div class="two-col">
+          <div class="panel">
+            <div class="panel-head">
+              <h2>Candidate profile</h2><button class="text-btn" onclick="showPage('resume')">Analyze resume</button>
+            </div>
+            <div id="candidateSummary" class="empty">Upload your resume to personalize questions.</div>
+          </div>
+          <div class="panel">
+            <div class="panel-head">
+              <h2>Recent interviews</h2><button class="text-btn" onclick="showPage('history')">View all</button>
+            </div>
+            <div id="recentHistory" class="empty">No interviews completed yet.</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="setup" class="page">
+        <div class="page-heading">
+          <p class="eyebrow">NEW SESSION</p>
+          <h1>Configure your interview</h1>
+          <p class="muted">There is no time limit. Think carefully and answer naturally.</p>
+        </div>
+        <div class="setup-card">
+          <h3>Interview type</h3>
+          <div class="choice-grid" id="typeChoices">
+            <button class="choice selected" data-value="Technical"><b>Technical</b><span>Python, SQL, CS and
+                development</span></button>
+            <button class="choice" data-value="Behavioral"><b>Behavioral</b><span>Situations, teamwork and
+                communication</span></button>
+            <button class="choice" data-value="HR"><b>HR</b><span>Introduction, motivation and career</span></button>
+            <button class="choice" data-value="Projects"><b>Projects</b><span>Project explanation and
+                defense</span></button>
+          </div>
+          <h3>Difficulty</h3>
+          <div class="segmented" id="difficultyChoices"><button class="selected" data-value="Easy">Easy</button><button
+              data-value="Medium">Medium</button><button data-value="Hard">Hard</button></div>
+          <h3>Questions</h3>
+          <div class="segmented" id="countChoices"><button class="selected" data-value="5">5</button><button
+              data-value="7">7</button><button data-value="10">10</button></div>
+          <div class="setup-note"><span>∞</span>
+            <div><b>Unlimited answer time</b><small>You can think and write for as long as you need. No countdown and no
+                automatic submission.</small></div>
+          </div>
+          <button class="primary wide" onclick="startInterview()">Begin Interview</button>
+        </div>
+      </section>
+
+      <section id="resume" class="page">
+        <div class="page-heading">
+          <p class="eyebrow">RESUME INTELLIGENCE</p>
+          <h1>Resume & ATS Analyzer</h1>
+          <p class="muted">Upload a text-based PDF or TXT file. Everything runs locally in your browser.</p>
+        </div>
+        <div class="panel ai-setup-panel">
+          <div class="panel-head">
+            <h2>🤖 AI Interview Agent</h2><span class="pill">Built-in</span>
+          </div>
+          <p class="muted">No Gemini API key required. The agent uses the interview question, your detected resume
+            skills and projects, and built-in interview coaching rules.</p>
+          <div class="agent-feature-grid">
+            <div><b>💡 Suggest</b><small>Hints without giving away the answer.</small></div>
+            <div><b>🎯 Interview Coach</b><small>What the interviewer is checking.</small></div>
+            <div><b>✅ Ideal Answer</b><small>A strong answer structure and example.</small></div>
+          </div>
+          <p class="security-note">Your resume stays in the browser/Firebase profile. No external AI API is called by
+            this version.</p>
+        </div>
+        <div class="panel upload-panel">
+          <label class="upload-box"><input id="resumeInput" type="file" accept=".pdf,.txt"><span
+              class="upload-icon">↑</span><b>Choose your resume</b><small>PDF or TXT</small></label>
+          <div id="resumeStatus" class="muted">No resume uploaded.</div>
+        </div>
+        <div id="resumeResults" class="hidden">
+          <div class="ats-card">
+            <div><span class="eyebrow">ATS-STYLE SCORE</span>
+              <div class="ats-score"><strong id="atsScore">0</strong><span>/100</span></div>
+            </div>
+            <div id="atsMessage"></div>
+          </div>
+          <div class="two-col">
+            <div class="panel">
+              <h2>Detected skills</h2>
+              <div id="skillsTags" class="tags"></div>
+            </div>
+            <div class="panel">
+              <h2>Projects</h2>
+              <div id="projectList"></div>
+            </div>
+          </div>
+          <div class="panel">
+            <h2>Job description matcher</h2><textarea id="jobDescription" class="large-input"
+              placeholder="Paste a job description here to find matching and missing keywords..."></textarea><button
+              class="primary" onclick="runJobMatch()">Analyze job match</button>
+            <div id="jobMatchResults"></div>
+          </div>
+          <div class="panel">
+            <h2>Personalized questions</h2>
+            <div id="resumeQuestions"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="topicQuestions" class="page">
+        <div class="page-heading">
+          <p class="eyebrow">FOCUSED PRACTICE</p>
+          <h1>Topic-Based Interview Questions</h1>
+          <p class="muted">Enter any subject and generate interview-style questions to practice. No API key is required
+            for this built-in question generator.</p>
+        </div>
+        <div class="panel topic-generator">
+          <label for="topicInput"><b>What topic do you want to practice?</b></label>
+          <input id="topicInput" class="large-input topic-input" type="text"
+            placeholder="e.g. Python, SQL joins, MongoDB, React hooks, OOP" autocomplete="off">
+          <div class="topic-controls">
+            <div><label for="topicDifficulty"><b>Difficulty</b></label><select id="topicDifficulty"
+                class="topic-select">
+                <option value="Beginner">Beginner</option>
+                <option value="Intermediate" selected>Intermediate</option>
+                <option value="Advanced">Advanced</option>
+              </select></div>
+            <div><label for="topicCount"><b>Number of questions</b></label><select id="topicCount" class="topic-select">
+                <option value="5">5 questions</option>
+                <option value="7" selected>7 questions</option>
+                <option value="10">10 questions</option>
+              </select></div>
+          </div>
+          <button id="generateTopicQuestions" class="primary" type="button">Generate Questions</button>
+          <p id="topicQuestionStatus" class="muted topic-status" aria-live="polite">Enter a topic to get started.</p>
+        </div>
+        <div id="topicQuestionResults" class="panel hidden">
+          <div class="panel-head">
+            <h2 id="topicResultsTitle">Your questions</h2><button id="copyTopicQuestions" class="secondary"
+              type="button">Copy Questions</button>
+          </div>
+          <div id="topicQuestionList"></div>
+        </div>
+      </section>
+
+      <section id="interview" class="page">
+        <div class="interview-top">
+          <div><span id="liveType" class="pill">Technical</span><span id="liveProgress">Question 1</span></div><span
+            class="no-timer">∞ No time limit</span>
+        </div>
+        <div class="progress-line">
+          <div id="questionProgress"></div>
+        </div>
+        <div class="question-card">
+          <span class="eyebrow">INTERVIEW QUESTION</span>
+          <h1 id="questionText">Question</h1>
+          <div id="questionHint" class="question-hint"></div>
+          <div class="ai-agent-card">
+            <div class="ai-agent-head">
+              <div><span class="ai-spark">✦</span>
+                <div><b>AI Interview Agent</b><small>Guidance based on your resume and this question</small></div>
+              </div><span id="agentStatus" class="agent-status">Ready</span>
+            </div>
+            <div class="agent-modes"><button class="selected" data-agent-mode="suggest"
+                onclick="getAgentHelp('suggest')">💡 Suggest</button><button data-agent-mode="coach"
+                onclick="getAgentHelp('coach')">🎯 Interview Coach</button><button data-agent-mode="ideal"
+                onclick="getAgentHelp('ideal')">✅ Ideal Answer</button></div>
+            <div id="agentOutput" class="agent-output"><b>Start with a suggestion.</b>
+              <p>The agent will help you identify the key points without forcing you to copy a memorized answer.</p>
+            </div>
+          </div>
+          <textarea id="answerInput" class="answer-box"
+            placeholder="Take your time. Write or speak your answer here..."></textarea>
+          <div class="answer-tools"><span id="wordCount">0 words</span><button class="secondary"
+              onclick="clearAnswer()">Clear</button><button class="secondary" onclick="startVoiceInput()">🎙 Voice
+              answer</button><button id="followUpBtn" class="secondary" onclick="requestFollowUp()">↪ Ask a
+              follow-up</button></div>
+          <div class="interview-actions"><button class="secondary" onclick="skipQuestion()">Skip</button><button
+              class="primary" onclick="submitCurrentAnswer()">Submit Answer</button></div>
+        </div>
+      </section>
+
+      <section id="results" class="page">
+        <div class="page-heading">
+          <p class="eyebrow">SESSION COMPLETE</p>
+          <h1>Your interview report</h1>
+          <p class="muted">Review every answer and learn exactly how to improve it.</p>
+        </div>
+        <div class="result-hero">
+          <div class="result-score"><strong id="finalScore">0</strong><span>/100</span></div>
+          <div>
+            <h2 id="resultMessage"></h2>
+            <p id="resultSummary"></p>
+          </div>
+        </div>
+        <div class="report-grid">
+          <div class="stat"><span>Answered</span><strong id="resultAnswered">0</strong></div>
+          <div class="stat"><span>Skipped</span><strong id="resultSkipped">0</strong></div>
+          <div class="stat"><span>Questions</span><strong id="resultTotal">0</strong></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Answer review</h2><span class="muted">Correct answer guidance is shown for weak answers.</span>
+          </div>
+          <div id="answerReview"></div>
+        </div>
+        <div class="panel">
+          <h2>Weak areas</h2>
+          <div id="weakAreas"></div>
+        </div>
+        <div class="panel">
+          <h2>Personalized learning plan</h2>
+          <div id="learningPlan"></div>
+        </div>
+        <div class="interview-actions"><button class="secondary"
+            onclick="showPage('dashboard')">Dashboard</button><button class="primary"
+            onclick="showPage('setup')">Practice Again</button></div>
+      </section>
+
+      <section id="history" class="page">
+        <div class="page-heading">
+          <p class="eyebrow">YOUR DATA</p>
+          <h1>Interview history</h1>
+          <p class="muted">Only interviews you actually complete are recorded.</p>
+        </div>
+        <div class="panel">
+          <div id="historyList" class="empty">No interviews completed yet.</div>
+        </div>
+      </section>
+
+      <section id="progress" class="page">
+        <div class="page-heading">
+          <p class="eyebrow">IMPROVEMENT</p>
+          <h1>Your progress</h1>
+          <p class="muted">Your dashboard starts at zero and grows from your real practice.</p>
+        </div>
+        <div class="stats">
+          <div class="stat"><span>Completed</span><strong id="progressCompleted">0</strong></div>
+          <div class="stat"><span>Average</span><strong id="progressAverage">—</strong></div>
+          <div class="stat"><span>Best</span><strong id="progressBest">—</strong></div>
+          <div class="stat"><span>Answered</span><strong id="progressAnswered">0</strong></div>
+        </div>
+        <div class="panel">
+          <h2>Weak-area tracker</h2>
+          <div id="progressWeak" class="empty">Complete an interview to see weak areas.</div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script type="module" src="firebase-init.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>
