@@ -32,3 +32,7 @@ Interview Twin is a web-based mock interview platform for interview practice, re
 
 7. **Run**  
    Use **Live Server**. Do not open with `file://`.
+
+
+## Topic Questions
+The Topic Questions section provides question-only practice sets for engineering and IT roles including software/web/frontend/backend/full-stack developers, testers and QA, application/mobile developers, DevOps, data analyst/engineer, cloud, cybersecurity, DBA, UI/UX, IT/technical support, business analyst, AI/ML, network/system administration, and Scrum Master. Select a topic/role, difficulty, and question count. Questions are curated local examples and do not require an AI API.
